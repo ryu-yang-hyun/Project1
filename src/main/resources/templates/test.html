@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko" xmln="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(function() {
+                // 엑셀 업로드 버튼을 클릭하면
+                // hidden으로 숨겨둔 input file을 클릭
+                $("#excelUpload").click(function(e) {
+                    e.preventDefault();
+                    $("#file").click();
+                });
+
+                // form의 값이 변경 되었으면 excel전송
+                $("#upload").change(function(e) {
+                    e.preventDefault();
+                    excelSubmit();
+                });
+            });
+
+            var excelSubmit = function () {
+                var form = $('#upload')[0];
+                var formData = new FormData(form);
+
+                // 파일을 비동기로 전송한다.
+                $.ajax({
+                    url: '/test/exceluploads',
+                    method: 'POST',
+                    enctype: 'multipart/form-data',
+                    data:formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+
+                    success: function (resp) {
+                        alert("upload ok");
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+    <body>
+    엑셀업로드 : <br/>
+    <form name="upload" id="upload" enctype="multipart/form-data">
+        <input type="file" id="file" name="file" value="엑셀 업로드" />
+    </form>
+    <button type="button" id="excelUpload">upload</button>
+    </body>
+</html>
